@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>register</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="/my.css" rel="stylesheet">
+    <style>
+    </style>
+    <script src="/util/my_web_util.js"></script>
+    <script>
+        $(async function () {
+            $("#btn_register").click(_click_btn_register);
+        });
+
+        async function _click_btn_register() {
+            let id = encodeURIComponent($("#txt_id").val());
+            let pw = encodeURIComponent($("#txt_pw").val());
+            let pw_confirm = encodeURIComponent($("#txt_pw_confirm").val());
+            let name = encodeURIComponent($("#txt_name").val());
+            let phone_number = encodeURIComponent($("#txt_phone_number").val());
+            let email = encodeURIComponent($("#txt_email").val());
+
+            if (pw !== pw_confirm) {
+                alert("Password verification is different !!!");
+                return;
+            }
+
+            let url = `/api/func_api?cmd=register&id=${id}&pw=${pw}&name=${name}&phone_number=${phone_number}&email=${email}`;
+            let res = await mwu.fetch_async(url);
+            alert(JSON.stringify(res, null, 2));
+        }
+    </script>
+</head>
+<body>
+<div class="container-fluid bg-primary text-white p-3">
+    <span class="display-1">register</span>
+</div>
+<div class="row">
+    <span class="col_fit">id :</span>
+    <input id="txt_id" class="col_full form-control" type="text" placeholder="Enter id ..."/>
+</div>
+<div class="row">
+    <span class="col_fit">pw :</span>
+    <input id="txt_pw" class="col_full form-control" type="password" placeholder="Enter pw ..."/>
+</div>
+<div class="row">
+    <span class="col_fit ">pw confirm :</span>
+    <input id="txt_pw_confirm" class="col_full form-control" type="password" placeholder="Confirm pw ..."/>
+</div>
+<div class="row">
+    <span class="col_fit ">name :</span>
+    <input id="txt_name" class="col_full form-control" type="text" placeholder="Enter name ..."/>
+</div>
+<div class="row">
+    <span class="col_fit ">phone_number :</span>
+    <input id="txt_phone_number" class="col_full form-control" type="text" placeholder="Enter phone_number ..."/>
+</div>
+<div class="row">
+    <span class="col_fit ">email :</span>
+    <input id="txt_email" class="col_full form-control" type="text" placeholder="Enter email ..."/>
+</div>
+<div class="row">
+    <button id="btn_register" class="col_full btn-primary " type="button">register</button>
+</div>
+</body>
+</html>

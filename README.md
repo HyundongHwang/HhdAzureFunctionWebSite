@@ -87,3 +87,28 @@ npm install --save node-fetch
     ```
     - 디버그 설정 추가
     ![image](https://user-images.githubusercontent.com/5696570/104556574-341dba00-5683-11eb-9383-e4cd6dc2d5a2.png)
+    
+ 
+ ## azure storage객체와 연동    
+- azure에 function객체 storage객체 생성
+    - https://portal.azure.com/#create/hub
+    - function객체 생성
+    ![image](https://user-images.githubusercontent.com/5696570/104558149-ae4f3e00-5685-11eb-92c9-81a61fa9fd7b.png)
+    ![image](https://user-images.githubusercontent.com/5696570/104558434-2158b480-5686-11eb-843f-0e1b8cf08e78.png)
+    - storage객체 생성
+    ![image](https://user-images.githubusercontent.com/5696570/104558536-4ea56280-5686-11eb-8b82-6247124fed2e.png)
+    ![image](https://user-images.githubusercontent.com/5696570/104558734-9cba6600-5686-11eb-9986-3ecbbe5374c1.png)
+    
+- storage객체 키획득
+    ![image](https://user-images.githubusercontent.com/5696570/104559033-210ce900-5687-11eb-8429-b17bef32e3b5.png)
+
+- https://docs.microsoft.com/ko-kr/azure/cosmos-db/table-storage-how-to-use-nodejs
+
+- 필요한 종속성 설치하기
+```
+npm install --save azure-storage
+```
+
+- 테스트
+    - http://localhost:7071/
+    - http://localhost:7071/register.html

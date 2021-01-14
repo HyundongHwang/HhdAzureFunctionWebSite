@@ -1,0 +1,23 @@
+.row {
+    display: flex;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.col_fit {
+    display: flex;
+    flex: none;
+    margin-left: 20px;
+}
+
+.col_full {
+    display: flex;
+    flex: 1;
+    margin-left: 20px;
+}
+
+button {
+    font-size: 20px;
+    padding: 20px;
+}
