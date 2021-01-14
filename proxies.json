@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json.schemastore.org/proxies",
+  "proxies": {
+    "static_rule": {
+      "matchCondition": {
+        "route": "/{*restOfPath}"
+      },
+      "backendUri": "https://localhost/api/func_static?file_path={restOfPath}"
+    },
+    "api_rule": {
+      "matchCondition": {
+        "route": "/api/{*restOfPath}"
+      },
+      "backendUri": "https://localhost/api/{restOfPath}"
+    }
+  }
+}
