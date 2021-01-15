@@ -86,7 +86,7 @@
 
 ### 1. git clone
 - 이 리파지토리의 소스코드를 clone 하고 시작함.
-```
+```shell script
 PS C:\project> git clone git@github.com:HyundongHwang/HhdAzureFunctionWebSite.git
 ```
 
@@ -109,7 +109,7 @@ PS C:\project> git clone git@github.com:HyundongHwang/HhdAzureFunctionWebSite.gi
 - node.js를 로컬에 설치함.
 - https://nodejs.org/ko/download/ 에서 설치함.
 
-```
+```shell script
 PS C:\project\HhdAzureFunctionWebSite> node --version
 v12.19.0
 
@@ -122,7 +122,7 @@ PS C:\project\HhdAzureFunctionWebSite> npm --version
 - 다운로드 : https://aka.ms/installazurecliwindows
 - 참고 : https://docs.microsoft.com/ko-kr/cli/azure/install-azure-cli-windows
 
-```
+```shell script
 PS C:\project\HhdAzureFunctionWebSite> az --version
 azure-cli                         2.17.1
 core                              2.17.1
@@ -141,7 +141,7 @@ and let us know if you're interested in trying out our newest features: https://
 - 다운로드 : https://go.microsoft.com/fwlink/?linkid=2135274
 - 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/functions-run-local
 
-```
+```shell script
 PS C:\project\HhdAzureFunctionWebSite> func --version
 3.0.2931
 ```
@@ -151,7 +151,7 @@ PS C:\project\HhdAzureFunctionWebSite> func --version
 - Azure Portal에서 위에서 생성한 Azure Storage Service 키를 복사해서 `/.key.json` 파일을 아래와 같이 생성함.
 - ![image](https://user-images.githubusercontent.com/5696570/104559033-210ce900-5687-11eb-8429-b17bef32e3b5.png)
 - `/.key.json`
-    ```
+    ```json
     {
         "storage_account_name": "hhdazurefunctionwebsite",
         "storage_account_key": "TYTH1IuwZm2xxxxxxxG0j5vrbkfLasxQ=="
@@ -160,7 +160,7 @@ PS C:\project\HhdAzureFunctionWebSite> func --version
  
 ### 8. node.js 라이브러리 설치
 - `npm install` 로 node.js에서 사용한 외부 라이브러리 한번에 모두 설치
-```
+```shell script
 PS C:\project\HhdAzureFunctionWebSite> npm install
 npm WARN HhdAzureFunctionWebSite No repository field.
 npm WARN HhdAzureFunctionWebSite No license field.
@@ -173,7 +173,7 @@ found 0 vulnerabilities
 ### 9. 로컬환경에서 테스트
 - `func start` 로 Azure Function Runtime으로 로컬에서 웹서버 실행
 
-```
+```shell script
 PS C:\project\HhdAzureFunctionWebSite> func start
 Azure Functions Core Tools (3.0.2931 Commit hash: d552c6741a37422684f0efab41d541ebad2b2bd2)
 Function Runtime Version: 3.0.14492.0
@@ -200,7 +200,7 @@ For detailed output, run func with --verbose flag.
 
 - WebStorm 디버깅을 위해 디버깅 포트 설정
     - `local.settings.json` 편집
-    ```
+    ```json
     {
       "Values": {
         "languageWorkers:node:arguments": "--inspect=5858"
@@ -214,7 +214,7 @@ For detailed output, run func with --verbose flag.
 
 - 위에서 로컬환경에서 상세히 테스트된 웹사이트를 Azure Function에 배포
 - Azure에 로그인
-    ```
+    ```shell script
     (base) PS C:\project\HhdAzureFunctionWebSite> az login
     The default web browser has been opened at https://login.microsoftonline.com/common/oauth2/authorize. Please continue the login in the web browser. If no web browser is available or if the web browser fails to open, us
     e device code flow with `az login --use-device-code`.
@@ -237,7 +237,7 @@ For detailed output, run func with --verbose flag.
     ]
     ```
 - Azure Function 에 배포
-    ```
+    ```shell script
     (base) PS C:\project\HhdAzureFunctionWebSite> func azure functionapp publish hhdazurefunctionwebsite
     Getting site publishing info...
     Creating archive for current directory...
@@ -262,7 +262,7 @@ For detailed output, run func with --verbose flag.
 - 가장 처음으로 Azure Function 기초코드를 `func init`을 통해서 생성하고 시작할 수 있음.
     - worker:node, language:javascript를 선택함.
     - Azure Function이 MS기술이라 C#이 가장 무난할 것 같지만, node.js를 사용해도 끝까지 큰 문제가 없고, Linux에서도 잘 동작함.
-    ```
+    ```shell script
     PS C:\project> func init HhdAzureFunctionWebSite
     Use the up/down arrow keys to select a worker runtime:node
     Use the up/down arrow keys to select a language:javascript
@@ -290,7 +290,7 @@ For detailed output, run func with --verbose flag.
     - func_api : register, login, me 등 각종 REST API 요청을 처리하는 기능.
     - func_static : /index.html, /home.html, /my.css 등 정적파일요청을 처리하는 기능.
 
-```
+```shell script
 (base) PS C:\project\HhdAzureFunctionWebSite> func new --name func_api --template "HTTP trigger" --authlevel "anonymous"
 Use the up/down arrow keys to select a template:HTTP trigger
 Function name: [HttpTrigger] Writing C:\project\HhdAzureFunctionWebSite\func_api\index.js
@@ -330,8 +330,8 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
     - 정적파일요청은 `func_static` 가 처리해야 함.
     - 이렇게 하기 위해선 웹서버 앞단에서 요청에 따른 분기기능이 필요하고 이를 `proxies.json` 을 생성하여 처리할 수 있음.
 
-- `proxies.json`
-    ```
+- `/proxies.json`
+    ```json
     {
       "$schema": "http://json.schemastore.org/proxies",
       "proxies": {
@@ -352,9 +352,30 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
     ```    
 
 ### node.js 유틸리티 소개
-- 필자가 상술했듯, Promise, async/await을 쉽게 사용하고 또 이를 재사용 하기 위해 자주 사용하는 비동기기능들을 동기함수처럼 변환해서 유틸리티로 만들었음.
-- ``
-    ```
+- 필자가 상술했듯, Promise, async/await을 쉽게 사용하고 또 이를 재사용 하기 위해 자주 사용하는 비동기기능들을 동기함수처럼 변환(async 함수 변환)해서 유틸리티로 만들었음.
+- `/util/my_node_util.js`
+    ```javascript
+    "use strict";
+    const fs = require('fs');
+    const util = require('util');
+    const uuid = require("uuid");
+    
+    // fs.readFile은 비동기함수인데 util.promisify 를 통해 async함수로 변환할 수 있음.
+    module.exports.fs_read_file_async = util.promisify(fs.readFile);
+    
+    // 계산된 결과를 json 응답하는 유틸리티 함수
+    module.exports.context_res_done = function (context, status, body) {
+        context.res = {
+            status: status,
+            body: body,
+            headers: {
+                "Content-Type": "application/json"
+            },
+        };
+        context.done();
+    }
+    
+    ...
     ```
 
 ### 프론트엔드 유틸리티 소개
