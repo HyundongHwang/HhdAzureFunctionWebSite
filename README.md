@@ -377,8 +377,211 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
     
     ...
     ```
+- `/util/azure_storage_util.js`
+    - Promise를 이용하여 Azure Storage Table Service의 테이블 생성, 항목 삽입/삭제/변경/조회 기능을 async함수로 구현
+    ```javascript
+    // https://docs.microsoft.com/ko-kr/azure/cosmos-db/table-storage-how-to-use-nodejs
+    "use strict";
+    const path = require('path');
+    const azure_storage = require('azure-storage');
+    const mnu = require("./my_node_util")
+  
+    let _table_svc
+    async function _get_table_svc_async() { 
+    
+    module.exports.get_entity_async = function (table_name, row_key) {
+        return new Promise(async (resolve, reject) => {
+            let table_svc = await _get_table_svc_async();
+            table_svc.retrieveEntity(table_name, "PartitionKey", row_key, function (error, result, response) {
+                if (result === undefined) {
+                    reject(error);
+                } else {
+                    let std_map = _standadize_azure_res(result);
+                    resolve(std_map);
+                }
+            });
+        })
+    }
+    
+    module.exports.create_table_async = function (table_name) {
+        return new Promise(async (resolve, reject) => {
+            let table_svc = await _get_table_svc_async();
+            table_svc.createTableIfNotExists(table_name, function (error, result, response) {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            });
+        });
+    }
+    
+    module.exports.upsert_async = function (table_name, row_key, item) {
+    module.exports.query_entities_async = function (table_name, filter_col, filter_op, filter_value, select_col_list, res_num) {
+    module.exports.is_table_exist_async = function (table_name) {
+    ```
 
 ### 프론트엔드 유틸리티 소개
+- node.js 의 유틸리티와 마찬가지로 비동기 함수들을 async함수로 유틸리티화 했음.
+    - `/static/util/my_web_util.js`
+    ```javascript
+    "use strict";
+    
+    const mwu = {
+        fetch_async: function (url) {
+            return fetch(url).then(function (response) {
+                if (response.ok === true) {
+                    return response.json();
+                } else {
+                    return response;
+                }
+            })
+        },
+    
+    ...
+    }
+    ``` 
+
+### func_static 구현
+- `/static/*` 의 모든 파일들은 `/*` 로 정적파일 요청시 파일을 읽어서 응답하도록 함.
+    - 프론트엔드를 구성하는 *.html, *.js, *.css 파일들을 호스팅함.
+    - 거의 변경될 일이 없는 구현으로 다른 프로젝트에서도 그대로 써도 무방함. 
+- `/func_static/index.js`
+    ```javascript
+    "use strict";
+    
+    const path = require('path');
+    const mime_types = require('mime-types');
+    const mnu = require("../util/my_node_util");
+    
+    module.exports = async function (context, req) {
+        let file_path = "index.html";
+    
+        if (req.query.file_path) {
+            file_path = req.query.file_path;
+        }
+    
+        file_path = path.join(__dirname, "../static", file_path);
+        let file_data;
+    
+        try {
+            // 비동기함수를 콜백구현없이 쉽고 단순하게 사용가능함.
+            file_data = await mnu.fs_read_file_async(file_path);
+        } catch (err) {
+            context.log.error(err);
+            mnu.context_res_done(context, 404, err);
+            return;
+        }
+    
+        let content_type = mime_types.lookup(file_path);
+    
+        context.res = {
+            status: 200,
+            body: file_data,
+            isRaw: true,
+            headers: {
+                'Content-Type': content_type
+            }
+        };
+    
+        context.done();
+    }
+    ```  
+
+### func_api 구현
+- `/api/register`, `/api/login`, `/api/me` 요청에 대한 구현.
+- `/func_api/index.js`
+    ```javascript
+    "use strict";
+    
+    const mnu = require("../util/my_node_util");
+    const asu = require("../util/azure_storage_util");
+    
+    module.exports = async function (context, req) {
+        switch (req.query.cmd) {
+            case "register":
+                await _register_async(context);
+                break;
+            case "login":
+                await _login_async(context);
+                break;
+            case "me":
+                await _me_async(context);
+                break;
+            default:
+                mnu.context_res_done(context, 400, {
+                    msg: `cmd:${req.query.cmd} 를 처리할 수 없습니다.`
+                });
+                break;
+        }
+    }
+    
+    async function _register_async(context) {
+        // 새로운 사용자를 생성하여 upsert 함.
+        // 기존에 존재하는 사용자라면 정보가 업데이트 됨.
+        let new_user = {
+            id: context.req.query["id"],
+            pw: context.req.query["pw"],
+            name: context.req.query["name"],
+            phone_number: context.req.query["phone_number"],
+            email: context.req.query["email"],
+        }
+    
+        await asu.upsert_async("user", new_user["id"], new_user);
+        mnu.context_res_done(context, 200, new_user);
+    }
+    
+    async function _login_async(context) {
+        let id = context.req.query["id"];
+        let pw = context.req.query["pw"];
+        let user = await asu.get_entity_async("user", id);
+    
+        if (user["id"] !== id) {
+            mnu.context_res_done(context, 200, {
+                msg: `${id} 님은 존재하지 않는 사용자 입니다!!!`
+            });
+            return;
+        }
+    
+        if (user["pw"] !== pw) {
+            mnu.context_res_done(context, 200, {
+                msg: `${id} 님, 잘못된 패스워드 입니다!!!`
+            });
+            return;
+        }
+    
+        // 로그인 할때마다 새로운 세션키가 생성됨.    
+        let session_key = mnu.create_uuid();
+        user["session_key"] = session_key;
+    
+        await asu.upsert_async("user", id, user);
+    
+        // 로그인 성공하면 /home.html로 생성된 세션키와 함께 리다이렉트됨.
+        mnu.context_res_done(context, 200, {
+            redirect_url: `/home.html?session_key=${session_key}`,
+            user: user
+        });
+    }
+    
+    async function _me_async(context) {
+        // 현재 url에서 세션키를 획득하여 사용자정보를 조회함.
+        let session_key = context.req.query.session_key;
+        let me;
+        let user_list = await asu.query_entities_async("user", "session_key", "eq", session_key);
+        if (user_list.length === 0) {
+            // 사용자정보가 조회되지 않으면 부정요청으로 로그인이 해제되고 /index.html 로 리다이렉트됨.
+            mnu.context_res_done(context, 200, {
+                redirect_url: `/`
+            });
+            return;
+        } else {
+            me = user_list[0];
+        }
+    
+        mnu.context_res_done(context, 200, me);
+    }
+    ```
+
 
 ### 로그인 세션보안 구현
 
