@@ -1,4 +1,21 @@
 # HhdAzureFunctionWebSite
+
+## 소개
+
+- 웹서버와 DB를 사용한 간단한(회원가입, 로그인, 개인정보조회...) 등이 되는 간단한 웹사이트, 그 스켈레톤 코드
+- 구성
+    - 웹서버 : Azure Function HTTP Trigger 
+    - DB : Azure Storage Table Service
+    - 웹서버 기술 : node.js
+    - 프론트엔드 기술 : HTML, javascript, CSS, jQuery, BootStrap
+
+## 고민 & 해결방안
+## 데모
+## 실행 테스트
+## 상세 구현 소개
+
+
+
 HhdAzureFunctionWebSite
 
 ## func node 웹사이트 처음 생성
@@ -117,3 +134,45 @@ npm install --save azure-storage
 
     
 ## 로그인 세션보안 구현
+
+## 배포 
+
+```
+(base) PS C:\project\HhdAzureFunctionWebSite> az login
+The default web browser has been opened at https://login.microsoftonline.com/common/oauth2/authorize. Please continue the login in the web browser. If no web browser is available or if the web browser fails to open, us
+e device code flow with `az login --use-device-code`.
+You have logged in. Now let us find all the subscriptions to which you have access...
+[
+  {
+    "cloudName": "AzureCloud",
+    "homeTenantId": "a0abba16-6e89-470b-ab6b-xxx",
+    "id": "089fc2ec-4266-456e-b9b1-xxx",
+    "isDefault": true,
+    "managedByTenants": [],
+    "name": "종량제",
+    "state": "Enabled",
+    "tenantId": "a0abba16-6e89-470b-ab6b-xxx",
+    "user": {
+      "name": "hhd2002@hotmail.com",
+      "type": "user"
+    }
+  }
+]
+
+(base) PS C:\project\HhdAzureFunctionWebSite> func azure functionapp publish hhdazurefunctionwebsite
+Getting site publishing info...
+Creating archive for current directory...
+Uploading 2.14 MB [###############################################################################]
+Upload completed successfully.
+Deployment completed successfully.
+Syncing triggers...
+Syncing triggers...
+Syncing triggers...
+Syncing triggers...
+Syncing triggers...
+Syncing triggers...
+Error calling sync triggers (NotFound). Request ID = '0f3031c2-5b19-4ec4-9c8a-xxx'.
+
+```
+
+- https://hhdazurefunctionwebsite.azurewebsites.net/
