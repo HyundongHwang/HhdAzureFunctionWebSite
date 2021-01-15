@@ -1,5 +1,30 @@
 # HhdAzureFunctionWebSite
 
+- [HhdAzureFunctionWebSite](#hhdazurefunctionwebsite)
+    - [소개](#소개)
+    - [고민 & 해결방안](#고민--해결방안)
+    - [데모](#데모)
+    - [실행 테스트](#실행-테스트)
+        - [1. git clone](#1-git-clone)
+        - [2. Azure Function 생성](#2-azure-function-생성)
+        - [3. Azure Storage Service 생성](#3-azure-storage-service-생성)
+        - [4. node.js 설치](#4-nodejs-설치)
+        - [5. Azure CLI 설치](#5-azure-cli-설치)
+        - [6. Azure Function Runtime 설치](#6-azure-function-runtime-설치)
+        - [7. Azure Storage Service 키 설정](#7-azure-storage-service-키-설정)
+        - [8. node.js 라이브러리 설치](#8-nodejs-라이브러리-설치)
+        - [9. 로컬환경에서 테스트](#9-로컬환경에서-테스트)
+        - [10. 디버깅 환경설정](#10-디버깅-환경설정)
+        - [11. Azure Function 배포](#11-azure-function-배포)
+    - [상세 구현 소개](#상세-구현-소개)
+        - [Azure Function node.js 프로젝트 처음 생성.](#azure-function-nodejs-프로젝트-처음-생성)
+        - [함수 만들기](#함수-만들기)
+        - [설계](#설계)
+        - [프록시 룰 설정](#프록시-룰-설정)
+        - [로그인 세션보안 구현](#로그인-세션보안-구현)
+        - [배포](#배포)
+
+
 ## 소개
 
 - 웹서버와 DB를 사용한 간단한(회원가입, 로그인, 개인정보조회...) 등이 되는 간단한 웹사이트, 그 스켈레톤 코드
@@ -232,60 +257,39 @@ For detailed output, run func with --verbose flag.
 
 ## 상세 구현 소개
 
+### Azure Function node.js 프로젝트 처음 생성.
 
-## func node 웹사이트 처음 생성
+- 가장 처음으로 Azure Function 기초코드를 `func init`을 통해서 생성하고 시작할 수 있음.
+    - worker:node, language:javascript를 선택함.
+    - Azure Function이 MS기술이라 C#이 가장 무난할 것 같지만, node.js를 사용해도 끝까지 큰 문제가 없고, Linux에서도 잘 동작함.
+    ```
+    PS C:\project> func init HhdAzureFunctionWebSite
+    Use the up/down arrow keys to select a worker runtime:node
+    Use the up/down arrow keys to select a language:javascript
+    Writing package.json
+    .gitignore already exists. Skipped!
+    Writing host.json
+    Writing local.settings.json
+    Writing C:\project\HhdAzureFunctionWebSite\.vscode\extensions.json
+    ```
 
-- https://docs.microsoft.com/ko-kr/azure/azure-functions/functions-run-local
-- https://docs.microsoft.com/ko-kr/azure/azure-functions/create-first-function-cli-node
+- 생성후 `func start`를 수행하여 로컬 웹서버를 실행하고 프로젝트가 잘 생성되었는지 확인함.
+    - http://localhost:7071/ 요청
+    - ![image](https://user-images.githubusercontent.com/5696570/104542850-a2ed1a00-5667-11eb-9425-8104b1927bf1.png)
+  
+- 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/functions-run-local
+- 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/create-first-function-cli-node
 
+### 함수 만들기
+- 이제 node.js 에서 함수를 만들것임.
+    - node.js에서 웹서버를 만든다면 거의 표준처럼 express를 사용하게 되는데, Azure Function에서는 사용할 수 없음.
+    - 잘 생각해보면 당연한게, Azure Function은 독립형 웹서버가 아닌 서버리스라서 웹서버코드 내부에 데몬같은 독립실행되는 프로세스를 둘 수 없으며, 
+    - 요청이 있으면 최단시간에 계산후 결과를 리턴하는 구조로만 모든 코드가 작성되야 하기 때문에, express 같은 독립실행형 미들웨어는 구조상 맞지 않음.
+    - 이 샘플코드의 중요한 역할중 하나로 express를 쓰지 않고도 `Azure Function + node.js` 구성으로 기능상 부족하지 않게 하는 것임.
+- 프로젝트 내의 함수는 2개를 만들것임. 
+    - func_api : register, login, me 등 각종 REST API 요청을 처리하는 기능.
+    - func_static : /index.html, /home.html, /my.css 등 정적파일요청을 처리하는 기능.
 
-```
-PS C:\project> func init HhdAzureFunctionWebSite
-Use the up/down arrow keys to select a worker runtime:node
-Use the up/down arrow keys to select a language:javascript
-Writing package.json
-.gitignore already exists. Skipped!
-Writing host.json
-Writing local.settings.json
-Writing C:\project\HhdAzureFunctionWebSite\.vscode\extensions.json
-```
-
-```
-(base) PS C:\project\HhdAzureFunctionWebSite> func start
-Azure Functions Core Tools (3.0.2931 Commit hash: d552c6741a37422684f0efab41d541ebad2b2bd2)
-Function Runtime Version: 3.0.14492.0
-[2021-01-14T03:47:12.199] File 'C:\Program Files\dotnet\dotnet.exe' is not found, 'dotnet' invocation will rely on the PATH environment variable.
-[2021-01-14T03:47:13.932] No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registrati
-on method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.).
-Hosting environment: Production
-Content root path: C:\project\HhdAzureFunctionWebSite
-Now listening on: http://0.0.0.0:7071
-Application started. Press Ctrl+C to shut down.
-For detailed output, run func with --verbose flag.
-[2021-01-14T03:48:58.967] Worker process started and initialized.
-```
-
-- http://localhost:7071/ 요청
-![image](https://user-images.githubusercontent.com/5696570/104542850-a2ed1a00-5667-11eb-9425-8104b1927bf1.png)
-
-
-
-## 첫함수 만들기
-
-
-- https://docs.microsoft.com/ko-kr/azure/azure-functions/create-first-function-cli-csharp
-
-
-```
-(base) PS C:\project\HhdAzureFunctionWebSite> func --version
-3.0.2931
-(base) PS C:\project\HhdAzureFunctionWebSite> az --version
-azure-cli                         2.17.1
-core                              2.17.1
-telemetry                          1.0.6
-```
-
-- 함수 만들기
 ```
 (base) PS C:\project\HhdAzureFunctionWebSite> func new --name func_api --template "HTTP trigger" --authlevel "anonymous"
 Use the up/down arrow keys to select a template:HTTP trigger
@@ -300,13 +304,53 @@ Writing C:\project\HhdAzureFunctionWebSite\func_static\function.json
 The function "func_static" was created successfully from the "HTTP trigger" template.
 ```
 
-- 테스트
-    - http://localhost:7071/
-    ![image](https://user-images.githubusercontent.com/5696570/104569993-b9f63100-5694-11eb-9c37-b58745837ed3.png)
-    - http://localhost:7071/register.html
-    ![image](https://user-images.githubusercontent.com/5696570/104570104-dbefb380-5694-11eb-907b-8cd4858ce420.png)
+- 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/create-first-function-cli-csharp
 
-    
-## 로그인 세션보안 구현
+### 설계
+- 기능은 간단하게 3가지를 만들것
+    - 회원가입 : /api/register?id={}&pw={}&name={}&phone_number={}&email={}
+    - 로그인 : /api/login?id={}&pw={}
+    - 자기정보조회 : /api/me?session_key={}
+- DB는 일단 user테이블만 존재함.
+    - user
+        - id
+        - pw
+        - name
+        - phone_number
+        - email
+        - session_key
+- 프론트페이지는 3화면
+    - 첫화면&로그인 : /index.html
+    - 회원가입 : /register.html
+    - 자기정보조회 : /home.html
 
-## 배포 
+### 프록시 룰 설정
+- 필요성
+    - REST API (`/api/me` ...)는 `func_api` 가 처리하고,
+    - 정적파일요청은 `func_static` 가 처리해야 함.
+    - 이렇게 하기 위해선 웹서버 앞단에서 요청에 따른 분기기능이 필요하고 이를 `proxies.json` 을 생성하여 처리할 수 있음.
+
+- `proxies.json`
+    ```
+    {
+      "$schema": "http://json.schemastore.org/proxies",
+      "proxies": {
+        "static_rule": {
+          "matchCondition": {
+            "route": "/{*restOfPath}"
+          },
+          "backendUri": "https://localhost/api/func_static?file_path={restOfPath}"
+        },
+        "api_rule": {
+          "matchCondition": {
+            "route": "/api/{*restOfPath}"
+          },
+          "backendUri": "https://localhost/api/{restOfPath}"
+        }
+      }
+    }
+    ```    
+
+### 로그인 세션보안 구현
+
+### 배포 
