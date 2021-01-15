@@ -13,7 +13,23 @@
             padding: 20px;
         }
     </style>
+    <script src="/util/my_web_util.js"></script>
     <script>
+        $(async function () {
+            $("#btn_login").click(_click_btn_login);
+        });
+
+        async function _click_btn_login() {
+            let id = encodeURIComponent($("#txt_id").val());
+            let pw = encodeURIComponent($("#txt_pw").val());
+            let url = `/api/func_api?cmd=login&id=${id}&pw=${pw}`;
+            let res = await mwu.fetch_async(url);
+            alert(JSON.stringify(res, null, 2));
+
+            if (res["redirect_url"] !== undefined) {
+                window.location.href = res["redirect_url"];
+            }
+        }
     </script>
 </head>
 <body>
