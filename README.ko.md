@@ -32,12 +32,12 @@
 
 ## Introduction
 
-- Simple website using web server and DB (member registration, login, personal information inquiry...), and its skeleton code
-- Composition
-    - WebServer : Azure Function HTTP Trigger 
+- 웹서버와 DB를 사용한 간단한(회원가입, 로그인, 개인정보조회...) 등이 되는 간단한 웹사이트, 그 스켈레톤 코드
+- 구성
+    - 웹서버 : Azure Function HTTP Trigger 
     - DB : Azure Storage Table Service
-    - WebServer technology : node.js
-    - Front-end technology : HTML, javascript, CSS, jQuery, BootStrap
+    - 웹서버 기술 : node.js
+    - 프론트엔드 기술 : HTML, javascript, CSS, jQuery, BootStrap
     - IDE : WebStorm
 
 <br/>
@@ -46,41 +46,41 @@
 
 ## Worries & Solutions
 
-- Very simple website skeleton code required.
-    - With this project development, skeleton sample code and necessary documents from floor to distribution are organized.
-- Worried about the cost of operating the website.
-    - Azure Function HTTP Trigger is a serverless method, so it charges based on the number of requests,
-    - It costs less than the smallest web server(around $10/month) resource in Azure.
-    - At the beginning of operation, the billing is almost $0.
-- Worried about the cost of operating the DB.
+- 매우 간단한 웹사이트의 스켈레톤 코드 필요
+    - 이번 프로젝트 개발로 스켈레톤 샘플코드와 바닥부터 배포까지 필요한 문서 정리
+- 웹사이트 운영비용 고민
+    - Azure Function HTTP Trigger는 서버리스방식이라 요청횟수를 기준으로 과금하므로
+    - Azure에서 가장작은 웹서버 리소스(1만원/월 정도)보다도 적게 과금함.
+    - 운영초기에는 거의 0원에 가까운 과금.
+- DB 운영비용 고민
     - Azure Storage Table Service는 NoSQL 방식의 DB로 기본사용료가 없으며
-    - At the beginning of operation, the billing is almost $0.
-    - It costs less than the smallest SQL server(around $10/month) resource in Azure.
-- Worried about the scaling of WebServer.
-    - Azure Function HTTP Trigger is a serverless method, so there is basically no worry about scaling according to traffic.
-- Worried about the scaling of DB.
-    - Azure Storage Table Service has no capacity limit, but rather, it is more cost-effective as data capacity increases.
-- Worried about the scaling of DB schema design, DB maintenance.
-    - Azure Storage Table Service is a NoSQL method, so unlike RDBMS method, schema is not specified separately,
-    - Relatively simple design using only the table name and RowKey,
-    - You can create a query by using a simple filter expression, and use and manage only through it.
-- Worried about the scaling of various many techniques.
-    - Inevitably, Javascript is used for the front end, so the backend also uses node.js to keep the technology type simple.
-- Worried about javascript callback hell.
-    - Resolve callback hell by using Javascript ES2017 version Promise, async/await.
-    - All frequently used asynchronous HTTP requests and asynchronous DB query/management tasks are converted like easy synchronous functions using Promise and async/await.
-    - I have made the related code into a utility that can be reused.   
-- Worried about convenient debugging, powerful refactoring.
-    - Convenient debugging and powerful refactoring using WebStorm instead of simple text editors like VsCode and Sublime.
-    - The official documents of Azure Function HTTP Trigger guide VsCode by default,
-    - Due to VsCode's Azure Function plugin problem, when you edit the source code, the debugging session is disconnected and the session starts anew, which takes a very long time.
-    - If you do not use VsCode's Azure Function plugin at all, start func from the command line and debug with WebStorm, you can continue editing and debugging source code without interruption.
-    - The setting to debug Azure Function with WebStorm is relatively simple, but it is not introduced in the official document, so it is easily introduced in the following article.
-- Worried about record the development process and configuration details
-    - Most of the development process and configuration details are done from the command line.
-    - If you proceed from the command line, the result message is detailed so it is easy to find errors and record the process.
-    - All of this skeleton sample code can be used on Windows and Linux, especially if the entire process is done from the command line, it is easy to proceed on Linux.
-    - Command line tools such as az (Azure management), func (Azure Function management), and npm (node.js management) are well prepared.
+    - 운영초기에는 거의 0원에 가까운 과금.
+    - Azure SQL SERVER를 사용하면 가장 작은 리소스라도 (1만원/월 정도)는 발생함.
+- 웹서버 스케일링 고민
+    - Azure Function HTTP Trigger는 서버리스방식이라 기본적으로 트래픽에 따른 스케일링 고민없음.
+- DB 스케일링 고민
+    - Azure Storage Table Service는 용량제한이 없고, 오히려 데이타 용량이 많아질수록 더 가격효율적임.
+- DB 설계, 관리고민
+    - Azure Storage Table Service는 NoSQL 방식이라 RDBMS방식과 달리 스키마가 별도로 지정되지 않으며,
+    - 테이블이름, RowKey 만을 이용하여 비교적 간단히 설계하고,
+    - 간단한 filter식을 이용해서 쿼리하여 사용/관리
+- 백엔드/프론트엔드에 사용되는 다양한 기술들 고민
+    - 어쩔수 없이 프론트엔드에는 Javascript가 사용되기 때문에 백엔드도 node.js를 사용해서 기술종류를 단순하게 유지.
+- Javascript의 콜백지옥 고민
+    - Javascript ES2017버전의 Promise, async/await 사용으로 콜백지옥 해결.
+    - 자주사용하는 비동기 HTTP 요청, 비동기 DB 쿼리/관리 작업들은 모두 Promise, async/await 를 사용하여 쉬운 동기함수처럼 변환함.
+    - 관련코드들을 재사용 가능하게 유틸리티로 만들어둠.   
+- 편리한 디버깅, 강력한 리펙토링 고민
+    - VsCode, Sublime 같은 단순 텍스트 편집기 대신, WebStorm 사용으로 편리한 디버깅, 강력한 리펙토링.
+    - Azure Function HTTP Trigger의 공식문서들은 VsCode를 기본으로 가이드하지만,
+    - VsCode의 Azure Function 플러그인 문제로 소스코드를 편집하면 디버깅세션이 끊어지고, 새로 시작되는데 이 시간이 엄청 길다.
+    - VsCode의 Azure Function 플러그인을 아예 사용하지 않고 명령행에서 func를 시작해서 WebStorm으로 디버깅하면 소스코드 편집과 디버깅을 중단없이 계속 할 수 있음.
+    - WebStorm으로 Azure Function 디버깅 하는 설정이 비교적 단순한데 공식문서에는 소개되지 않아서 아래글에서 쉽게 소개한다.
+- 개발과정, 설정세부사항 기록에 대한 고민
+    - 개발과정, 설정세부사항을 대부분 명령행에서 진행.
+    - 명령행에서 진행하면 결과메시지가 자세해서 오류찾기도 쉽고, 과정을 기록하기도 용이함.
+    - 이 스켈레톤 샘플코드는 전부 Windows, Linux에서 사용가능한데, 특히 전과정을 명령행에서 진행하면 Linux에서 진행하기 용이함.
+    - az(Azure 관리), func(Azure Function 관리), npm(node.js 관리) 등 명령행 도구들이 잘 준비되어 있음.
 
 <br/>
 <br/>
@@ -89,10 +89,10 @@
 ## DEMO
 
 - https://hhdazurefunctionwebsite.azurewebsites.net/
-- functions
-    - registeration 
-    - login
-    - check my user information
+- 기능
+    - 회원가입 
+    - 로그인
+    - 회원정보확인
 - ![demo](https://user-images.githubusercontent.com/5696570/104704182-ab268180-575b-11eb-90ae-d1cf5f8360fd.gif) 
 
 <br/>
@@ -102,7 +102,7 @@
 ## How to run
 
 ### 1. git clone
-- Started by cloning the source code of this repository.
+- 이 리파지토리의 소스코드를 clone 하고 시작함.
 ```shell script
 PS C:\project> git clone git@github.com:HyundongHwang/HhdAzureFunctionWebSite.git
 ```
@@ -112,9 +112,9 @@ PS C:\project> git clone git@github.com:HyundongHwang/HhdAzureFunctionWebSite.gi
 <br/>
 
 ### 2. Create Azure Function
-- Create a new Azure Function object to act as a web server.
-- Create a new Azure Function in `https://portal.azure.com/#create/hub`
-- Of course, `hhdazurefunctionwebsite` is already used by me, so readers should use a different name.
+- 웹서버 역할을 할 Azure Function 새 객체를 생성함.
+- https://portal.azure.com/#create/hub 에서 Azure Function 을 새로 생성함.
+- 당연하지만 `hhdazurefunctionwebsite` 는 필자가 이미 사용해서 독자들은 다른이름을 사용해야 함.
 - ![image](https://user-images.githubusercontent.com/5696570/104558149-ae4f3e00-5685-11eb-92c9-81a61fa9fd7b.png)
 - ![image](https://user-images.githubusercontent.com/5696570/104558434-2158b480-5686-11eb-843f-0e1b8cf08e78.png)
 
@@ -123,9 +123,9 @@ PS C:\project> git clone git@github.com:HyundongHwang/HhdAzureFunctionWebSite.gi
 <br/>
 
 ### 3. Create Azure Storage Service
-- Create a new Azure Storage Service object to act as a DB.
-- Create a new Azure Storage Service at `https://portal.azure.com/#create/hub`.
-- Of course, `hhdazurefunctionwebsite` is already used by me, so readers should use a different name.
+- DB 역할을 할 Azure Storage Service 새 객체를 생성함.
+- https://portal.azure.com/#create/hub 에서 Azure Storage Service 을 새로 생성함.
+- 당연하지만 `hhdazurefunctionwebsite` 는 필자가 이미 사용해서 독자들은 다른이름을 사용해야 함.
 - ![image](https://user-images.githubusercontent.com/5696570/104558536-4ea56280-5686-11eb-8b82-6247124fed2e.png)
 - ![image](https://user-images.githubusercontent.com/5696570/104558734-9cba6600-5686-11eb-9986-3ecbbe5374c1.png)
 
@@ -134,8 +134,8 @@ PS C:\project> git clone git@github.com:HyundongHwang/HhdAzureFunctionWebSite.gi
 <br/>
 
 ### 4. Install node.js
-- Install node.js locally.
-- Installed from `https://nodejs.org/en/download/`.
+- node.js를 로컬에 설치함.
+- https://nodejs.org/ko/download/ 에서 설치함.
 
 ```shell script
 PS C:\project\HhdAzureFunctionWebSite> node --version
@@ -150,9 +150,9 @@ PS C:\project\HhdAzureFunctionWebSite> npm --version
 <br/>
 
 ### 5. Install Azure CLI
-- Deployment/management for Azure can be done from the local command line. 
-- download : https://aka.ms/installazurecliwindows
-- reference : https://docs.microsoft.com/ko-kr/cli/azure/install-azure-cli-windows
+- Azure에 대한 배포/관리를 로컬 명령행에서 진행할 수 있음. 
+- 다운로드 : https://aka.ms/installazurecliwindows
+- 참고 : https://docs.microsoft.com/ko-kr/cli/azure/install-azure-cli-windows
 
 ```shell script
 PS C:\project\HhdAzureFunctionWebSite> az --version
@@ -173,9 +173,9 @@ and let us know if you're interested in trying out our newest features: https://
 <br/>
 
 ### 6. Install Azure Function Runtime
-- Management/execution/debugging of Azure Functions can be performed from the local command line.
-- download : https://go.microsoft.com/fwlink/?linkid=2135274
-- reference : https://docs.microsoft.com/ko-kr/azure/azure-functions/functions-run-local
+- Azure Function 에 대한 관리/실행/디버깅을 로컬 명령행에서 진행할 수 있음.
+- 다운로드 : https://go.microsoft.com/fwlink/?linkid=2135274
+- 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/functions-run-local
 
 ```shell script
 PS C:\project\HhdAzureFunctionWebSite> func --version
@@ -187,8 +187,8 @@ PS C:\project\HhdAzureFunctionWebSite> func --version
 <br/>
 
 ### 7. Create Azure Storage Service's key file
-- Setting a key for access to Azure Storage Service in node.js.
-- In the Azure portal, copy the Azure Storage Service key created above and create a `/.key.json` file as shown below.
+- node.js에서 Azure Storage Service 에 대한 접근을 위한 키 설정.
+- Azure Portal에서 위에서 생성한 Azure Storage Service 키를 복사해서 `/.key.json` 파일을 아래와 같이 생성함.
 - ![image](https://user-images.githubusercontent.com/5696570/104559033-210ce900-5687-11eb-8429-b17bef32e3b5.png)
 - `/.key.json`
     ```json
@@ -203,7 +203,7 @@ PS C:\project\HhdAzureFunctionWebSite> func --version
  <br/>
  
 ### 8. Install node.js's libraries
-- Install all external libraries used in node.js at once with `npm install`
+- `npm install` 로 node.js에서 사용한 외부 라이브러리 한번에 모두 설치
 ```shell script
 PS C:\project\HhdAzureFunctionWebSite> npm install
 npm WARN HhdAzureFunctionWebSite No repository field.
@@ -219,7 +219,7 @@ found 0 vulnerabilities
 <br/>
 
 ### 9. Test in local environment
-- Run web server locally with Azure Function Runtime with `func start`
+- `func start` 로 Azure Function Runtime으로 로컬에서 웹서버 실행
 
 ```shell script
 PS C:\project\HhdAzureFunctionWebSite> func start
@@ -241,7 +241,7 @@ For detailed output, run func with --verbose flag.
 [2021-01-15T09:08:07.634] Worker process started and initialized.
 ```
 
-- Local test
+- 로컬 테스트
       - http://localhost:7071/
 
 <br/>
@@ -250,16 +250,16 @@ For detailed output, run func with --verbose flag.
 
 ### 10. Configure debug environment
 
-- Setting the debugging port for WebStorm debugging
+- WebStorm 디버깅을 위해 디버깅 포트 설정
     - `local.settings.json` 편집
     ```json
     {
       "Values": {
         "languageWorkers:node:arguments": "--inspect=5858"
     ```
-- Add WebStorm debug settings
+- WebStorm 디버그 설정 추가
     - ![image](https://user-images.githubusercontent.com/5696570/104556574-341dba00-5683-11eb-9383-e4cd6dc2d5a2.png)
-- Run WebStrom debug (Ctrl+F9) with Azure Function Runtime running with `func start`
+- `func start`로 Azure Function Runtime 실행해둔 상태로 WebStrom 디버그(Ctrl+F9) 실행
     - ![image](https://user-images.githubusercontent.com/5696570/104705841-be3a5100-575d-11eb-82ba-4dd8369899ad.png)
 
 <br/>
@@ -268,8 +268,8 @@ For detailed output, run func with --verbose flag.
 
 ### 11. Deploy Azure Function
 
-- Deploy the website tested in detail in the local environment above to Azure Function
-- Login to Azure.
+- 위에서 로컬환경에서 상세히 테스트된 웹사이트를 Azure Function에 배포
+- Azure에 로그인
     ```shell script
     (base) PS C:\project\HhdAzureFunctionWebSite> az login
     The default web browser has been opened at https://login.microsoftonline.com/common/oauth2/authorize. Please continue the login in the web browser. If no web browser is available or if the web browser fails to open, us
@@ -292,7 +292,7 @@ For detailed output, run func with --verbose flag.
       }
     ]
     ```
-- Deploy to Azure Function.
+- Azure Function 에 배포
     ```shell script
     (base) PS C:\project\HhdAzureFunctionWebSite> func azure functionapp publish hhdazurefunctionwebsite
     Getting site publishing info...
@@ -308,7 +308,7 @@ For detailed output, run func with --verbose flag.
     Syncing triggers...
     Error calling sync triggers (NotFound). Request ID = '0f3031c2-5b19-4ec4-9c8a-xxx'.
     ```
-- Check deployment.
+- 배포결과확인
     - https://hhdazurefunctionwebsite.azurewebsites.net/
 
 <br/>
@@ -319,9 +319,9 @@ For detailed output, run func with --verbose flag.
 
 ### Create Azure Function node.js empty project
 
-- For the first time, you can create and start Azure Function basic code through `func init`.
+- 가장 처음으로 Azure Function 기초코드를 `func init`을 통해서 생성하고 시작할 수 있음.
     - worker:node, language:javascript를 선택함.
-    - Since Azure Function is an MS technology, C# seems to be the best, but there was no big problem until the end even with node.js, and it worked well on Linux.
+    - Azure Function이 MS기술이라 C#이 가장 무난할 것 같지만, node.js를 사용해도 끝까지 큰 문제가 없고, Linux에서도 잘 동작함.
     ```shell script
     PS C:\project> func init HhdAzureFunctionWebSite
     Use the up/down arrow keys to select a worker runtime:node
@@ -333,26 +333,26 @@ For detailed output, run func with --verbose flag.
     Writing C:\project\HhdAzureFunctionWebSite\.vscode\extensions.json
     ```
 
-- After creation, execute `func start` to run the local web server and check if the project is well created.
-    - Request `http://localhost:7071/` 
+- 생성후 `func start`를 수행하여 로컬 웹서버를 실행하고 프로젝트가 잘 생성되었는지 확인함.
+    - http://localhost:7071/ 요청
     - ![image](https://user-images.githubusercontent.com/5696570/104542850-a2ed1a00-5667-11eb-9425-8104b1927bf1.png)
   
-- reference : https://docs.microsoft.com/ko-kr/azure/azure-functions/functions-run-local
-- reference : https://docs.microsoft.com/ko-kr/azure/azure-functions/create-first-function-cli-node
+- 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/functions-run-local
+- 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/create-first-function-cli-node
 
 <br/>
 <br/>
 <br/>
 
 ### Create new function
-- Now we will create a function in node.js.
-    - If you create a web server in node.js, you will use express almost like a standard, but you cannot use it in Azure Function.
-    - If you think about it well, Azure Function is not a standalone web server, but serverless, so you can't put a daemon-like standalone process inside the web server code. 
-    - If there is a request, all codes should be written in a structure that returns the result after performing the operation in the shortest time, so standalone middleware such as express is not suitable for its structure.
-    - The important role of this sample code and this article is to provide a guide that can be used without lacking in functionality just by configuring `Azure Function + node.js` without using express.
-- We will create 2 functions in the project. 
-    - func_api : A function that handles various REST API requests such as register, login, and me.
-    - func_static : A function that handles static file requests such as /index.html, /home.html, /my.css.
+- 이제 node.js 에서 함수를 만들것임.
+    - node.js에서 웹서버를 만든다면 거의 표준처럼 express를 사용하게 되는데, Azure Function에서는 사용할 수 없음.
+    - 잘 생각해보면 당연한게, Azure Function은 독립형 웹서버가 아닌 서버리스라서 웹서버코드 내부에 데몬같은 독립실행되는 프로세스를 둘 수 없으며, 
+    - 요청이 있으면 최단시간에 계산후 결과를 리턴하는 구조로만 모든 코드가 작성되야 하기 때문에, express 같은 독립실행형 미들웨어는 구조상 맞지 않음.
+    - 이 샘플코드의 중요한 역할중 하나로 express를 쓰지 않고도 `Azure Function + node.js` 구성으로 기능상 부족하지 않게 하는 것임.
+- 프로젝트 내의 함수는 2개를 만들것임. 
+    - func_api : register, login, me 등 각종 REST API 요청을 처리하는 기능.
+    - func_static : /index.html, /home.html, /my.css 등 정적파일요청을 처리하는 기능.
 
 ```shell script
 (base) PS C:\project\HhdAzureFunctionWebSite> func new --name func_api --template "HTTP trigger" --authlevel "anonymous"
@@ -368,18 +368,18 @@ Writing C:\project\HhdAzureFunctionWebSite\func_static\function.json
 The function "func_static" was created successfully from the "HTTP trigger" template.
 ```
 
-- reference : https://docs.microsoft.com/ko-kr/azure/azure-functions/create-first-function-cli-csharp
+- 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/create-first-function-cli-csharp
 
 <br/>
 <br/>
 <br/>
 
 ### About design
-- The function should make three simple things
-    - register : /api/register?id={}&pw={}&name={}&phone_number={}&email={}
-    - login : /api/login?id={}&pw={}
-    - check my user information : /api/me?session_key={}
-- In the DB, only the user table exists.
+- 기능은 간단하게 3가지를 만들것
+    - 회원가입 : /api/register?id={}&pw={}&name={}&phone_number={}&email={}
+    - 로그인 : /api/login?id={}&pw={}
+    - 자기정보조회 : /api/me?session_key={}
+- DB는 일단 user테이블만 존재함.
     - user
         - id
         - pw
@@ -387,20 +387,20 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
         - phone_number
         - email
         - session_key
-- The front page consists of three screens.
-    - first page & login : /index.html
-    - login : /register.html
-    - check my user information : /home.html
+- 프론트페이지는 3화면
+    - 첫화면&로그인 : /index.html
+    - 회원가입 : /register.html
+    - 자기정보조회 : /home.html
 
 <br/>
 <br/>
 <br/>
 
 ### Create proxy file
-- Necessity
-    - REST API (`/api/me` ...) is handled by `func_api`,
-    - Static file requests should be handled by `func_static`.
-    - To do this, you need a branching function according to a request at the front of the web server, and you can create and process `proxies.json`.
+- 필요성
+    - REST API (`/api/me` ...)는 `func_api` 가 처리하고,
+    - 정적파일요청은 `func_static` 가 처리해야 함.
+    - 이렇게 하기 위해선 웹서버 앞단에서 요청에 따른 분기기능이 필요하고 이를 `proxies.json` 을 생성하여 처리할 수 있음.
 
 - `/proxies.json`
     ```json
@@ -428,7 +428,7 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
 <br/>
 
 ### node.js utility
-- As I mentioned above, in order to easily use Promise and async/await, and to reuse them, asynchronous functions that are often used are converted like synchronous functions (async function conversion) and made into utilities.
+- 필자가 상술했듯, Promise, async/await을 쉽게 사용하고 또 이를 재사용 하기 위해 자주 사용하는 비동기기능들을 동기함수처럼 변환(async 함수 변환)해서 유틸리티로 만들었음.
 - `/util/my_node_util.js`
     ```javascript
     "use strict";
@@ -436,10 +436,10 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
     const util = require('util');
     const uuid = require("uuid");
     
-    // fs.readFile is an asynchronous function, and can be converted to async function through util.promisify.
+    // fs.readFile은 비동기함수인데 util.promisify 를 통해 async함수로 변환할 수 있음.
     module.exports.fs_read_file_async = util.promisify(fs.readFile);
     
-    // Utility function to answer the calculated result in json
+    // 계산된 결과를 json 응답하는 유틸리티 함수
     module.exports.context_res_done = function (context, status, body) {
         context.res = {
             status: status,
@@ -454,7 +454,7 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
     ...
     ```
 - `/util/azure_storage_util.js`
-    - Implementing the Azure Storage Table Service table creation, item insertion/deletion/change/retrieval function with async function using Promise
+    - Promise를 이용하여 Azure Storage Table Service의 테이블 생성, 항목 삽입/삭제/변경/조회 기능을 async함수로 구현
     ```javascript
     // https://docs.microsoft.com/ko-kr/azure/cosmos-db/table-storage-how-to-use-nodejs
     "use strict";
@@ -502,7 +502,7 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
 <br/>
 
 ### front-end utility
-- Like the utility of node.js, asynchronous functions are made utility with async functions.
+- node.js 의 유틸리티와 마찬가지로 비동기 함수들을 async함수로 유틸리티화 했음.
     - `/static/util/my_web_util.js`
     ```javascript
     "use strict";
@@ -527,9 +527,9 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
 <br/>
 
 ### func_static
-- All files in `/static/*` read the file and respond when requesting a static file with `/*`.
-    - Hosts *.html, *.js, *.css files that make up the front end.
-    - It is an implementation that hardly ever changes, so it can be used in other projects. 
+- `/static/*` 의 모든 파일들은 `/*` 로 정적파일 요청시 파일을 읽어서 응답하도록 함.
+    - 프론트엔드를 구성하는 *.html, *.js, *.css 파일들을 호스팅함.
+    - 거의 변경될 일이 없는 구현으로 다른 프로젝트에서도 그대로 써도 무방함. 
 - `/func_static/index.js`
     ```javascript
     "use strict";
@@ -549,7 +549,7 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
         let file_data;
     
         try {
-            // Asynchronous functions can be used easily and simply without implementing a callback.
+            // 비동기함수를 콜백구현없이 쉽고 단순하게 사용가능함.
             file_data = await mnu.fs_read_file_async(file_path);
         } catch (err) {
             context.log.error(err);
@@ -605,8 +605,8 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
     }
     
     async function _register_async(context) {
-        // Create a new user and upsert.
-        // Information is updated if there is an existing user.
+        // 새로운 사용자를 생성하여 upsert 함.
+        // 기존에 존재하는 사용자라면 정보가 업데이트 됨.
         let new_user = {
             id: context.req.query["id"],
             pw: context.req.query["pw"],
@@ -638,13 +638,13 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
             return;
         }
     
-        // A new session key is generated every time you log in.
+        // 로그인 할때마다 새로운 세션키가 생성됨.    
         let session_key = mnu.create_uuid();
         user["session_key"] = session_key;
     
         await asu.upsert_async("user", id, user);
     
-        // If login is successful, it will be redirected with the session key created in /home.html.
+        // 로그인 성공하면 /home.html로 생성된 세션키와 함께 리다이렉트됨.
         mnu.context_res_done(context, 200, {
             redirect_url: `/home.html?session_key=${session_key}`,
             user: user
@@ -652,12 +652,12 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
     }
     
     async function _me_async(context) {
-        // User information is retrieved by acquiring the session key from the current url.
+        // 현재 url에서 세션키를 획득하여 사용자정보를 조회함.
         let session_key = context.req.query.session_key;
         let me;
         let user_list = await asu.query_entities_async("user", "session_key", "eq", session_key);
         if (user_list.length === 0) {
-            // If user information is not viewed, login is canceled due to fraudulent request and redirected to /index.html.
+            // 사용자정보가 조회되지 않으면 부정요청으로 로그인이 해제되고 /index.html 로 리다이렉트됨.
             mnu.context_res_done(context, 200, {
                 redirect_url: `/`
             });
@@ -675,7 +675,7 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
 <br/>
   
 ### front-end
-- The front-end codes are not difficult and are similar, so take a look at my information inquiry page `/static/home.html` as a representative.
+- front-end 코드들은 어렵지 않고 비슷비슷하므로 대표로 내정보조회 페이지 `/static/home.html` 을 살펴봄.
 
 ```html
 <head>
@@ -684,11 +684,11 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
         $(async function () {
             let session_key = mwu.get_query_param_value(location.search, "session_key");
             let url = `/api/func_api?cmd=me&session_key=${session_key}`;
-            // Also, the code is neat as it is processed synchronously using the async function.
+            // 역시 async 함수를 이용하여 동기적으로 처리해서 코드가 깔끔함.
             let res = await mwu.fetch_async(url);
             alert(JSON.stringify(res, null, 2));
 
-            // In case of abnormal user access, login is unlocked and redirected to /index.html.
+            // 비정상적인 사용자접근이면 로그인을 풀고, /index.html 로 리다이렉트함.
             if (res["redirect_url"] !== undefined) {
                 window.location.href = res["redirect_url"];
                 return;
