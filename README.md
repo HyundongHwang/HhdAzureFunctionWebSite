@@ -53,7 +53,7 @@
     - It costs less than the smallest web server(around $10/month) resource in Azure.
     - At the beginning of operation, the billing is almost $0.
 - Worried about the cost of operating the DB.
-    - Azure Storage Table Service는 NoSQL 방식의 DB로 기본사용료가 없으며
+    - Azure Storage Table Service is a NoSQL-style DB, and there is no basic usage fee.
     - At the beginning of operation, the billing is almost $0.
     - It costs less than the smallest SQL server(around $10/month) resource in Azure.
 - Worried about the scaling of WebServer.
