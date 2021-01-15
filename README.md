@@ -23,8 +23,8 @@
     + [Create proxy file](#create-proxy-file)
     + [node.js utility](#nodejs-utility)
     + [front-end utility](#front-end-utility)
-    + [func_static](#func-static)
-    + [func_api](#func-api)
+    + [func_static](#func_static)
+    + [func_api](#func_api)
 
 ## Introduction
 
