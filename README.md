@@ -257,7 +257,7 @@ For detailed output, run func with --verbose flag.
 
 ## 상세 구현 소개
 
-### Azure Function node.js 프로젝트 처음 생성.
+### Azure Function node.js 프로젝트 생성
 
 - 가장 처음으로 Azure Function 기초코드를 `func init`을 통해서 생성하고 시작할 수 있음.
     - worker:node, language:javascript를 선택함.
@@ -280,7 +280,7 @@ For detailed output, run func with --verbose flag.
 - 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/functions-run-local
 - 참고 : https://docs.microsoft.com/ko-kr/azure/azure-functions/create-first-function-cli-node
 
-### 함수 만들기
+### 함수 생성
 - 이제 node.js 에서 함수를 만들것임.
     - node.js에서 웹서버를 만든다면 거의 표준처럼 express를 사용하게 되는데, Azure Function에서는 사용할 수 없음.
     - 잘 생각해보면 당연한게, Azure Function은 독립형 웹서버가 아닌 서버리스라서 웹서버코드 내부에 데몬같은 독립실행되는 프로세스를 둘 수 없으며, 
@@ -350,6 +350,14 @@ The function "func_static" was created successfully from the "HTTP trigger" temp
       }
     }
     ```    
+
+### node.js 유틸리티 소개
+- 필자가 상술했듯, Promise, async/await을 쉽게 사용하고 또 이를 재사용 하기 위해 자주 사용하는 비동기기능들을 동기함수처럼 변환해서 유틸리티로 만들었음.
+- ``
+    ```
+    ```
+
+### 프론트엔드 유틸리티 소개
 
 ### 로그인 세션보안 구현
 
